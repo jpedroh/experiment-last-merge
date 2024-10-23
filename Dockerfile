@@ -26,7 +26,7 @@ RUN  set -ex; \
 
 WORKDIR /usr/src/app
 
-COPY --from=generic_merge ./generic-merge ./tools/generic-merge
+COPY --from=generic_merge ./last-merge ./tools/generic-merge
 COPY --from=jdime ./usr/bin/jdime ./tools/jdime
 COPY --from=mining_framework ./usr/local/bin/miningframework ./tools/miningframework
 COPY --from=cloc /usr/src/cloc ./dependencies/cloc
