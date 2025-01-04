@@ -8,7 +8,7 @@ FROM ghcr.io/jpedroh/jdime:develop as jdime
 
 FROM aldanial/cloc as cloc
 
-FROM ubuntu:24.04
+FROM openjdk:11
 
 WORKDIR /usr/src/app
 
@@ -19,22 +19,6 @@ COPY --from=cloc /usr/src/cloc ./dependencies/cloc
 # COPY --from=mergiraf /usr/src/mergiraf/target/release/mergiraf ./dependencies/mergiraf
 
 RUN ldd --version
-
-# Install OpenJDK-8
-RUN apt-get update && \
-    apt-get install -y openjdk-8-jdk && \
-    apt-get install -y ant && \
-    apt-get clean;
-    
-# Fix certificate issues
-RUN apt-get update && \
-    apt-get install ca-certificates-java && \
-    apt-get clean && \
-    update-ca-certificates -f;
-
-# Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA_HOME
 
 # ENTRYPOINT ["/entrypoint.sh"]
 
