@@ -4,7 +4,7 @@ FROM ghcr.io/jpedroh/miningframework:fix-unstructured-merge as mining_framework
 
 FROM ghcr.io/jpedroh/jdime:develop as jdime
 
-# FROM ghcr.io/jpedroh/mergiraf:main as mergiraf
+FROM ghcr.io/jpedroh/mergiraf:main as mergiraf
 
 FROM aldanial/cloc as cloc
 
@@ -16,12 +16,13 @@ COPY --from=last_merge ./last-merge ./tools/last-merge
 COPY --from=jdime ./usr/bin/jdime ./tools/jdime
 COPY --from=mining_framework ./usr/local/bin/miningframework ./tools/miningframework
 COPY --from=cloc /usr/src/cloc ./dependencies/cloc
-# COPY --from=mergiraf /usr/src/mergiraf/target/release/mergiraf ./dependencies/mergiraf
+COPY --from=mergiraf /usr/src/mergiraf/target/release/mergiraf ./dependencies/mergiraf
 
-RUN ldd --version
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
-# USER root
+USER root
 
 CMD ["./tools/miningframework/install/miningframework/bin/miningframework"]
