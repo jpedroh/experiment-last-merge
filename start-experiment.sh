@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source .env.local
 
 EXPERIMENT_NAME=${EXPERIMENT_NAME-$(date +"%Y_%m_%d_%H_%M")}
