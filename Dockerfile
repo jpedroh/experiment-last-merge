@@ -4,10 +4,6 @@ FROM ghcr.io/jpedroh/miningframework:fix-unstructured-merge as mining_framework
 
 FROM ghcr.io/jpedroh/jdime:develop as jdime
 
-FROM ghcr.io/jpedroh/mergiraf:main as mergiraf
-
-FROM aldanial/cloc as cloc
-
 FROM openjdk:8
 
 RUN  set -ex; \
@@ -28,12 +24,12 @@ RUN  set -ex; \
 
 WORKDIR /usr/src/app
 
-COPY --from=last_merge ./last-merge ./dependencies/last-merge
-COPY --from=jdime ./usr/bin/jdime ./tools/jdime
 COPY --from=mining_framework ./usr/local/bin/miningframework ./tools/miningframework
-COPY --from=cloc /usr/src/cloc ./dependencies/cloc
-COPY ./mergiraf ./dependencies/mergiraf
-COPY ./spork.jar ./dependencies/spork.jar
+
+COPY --from=last_merge ./last-merge ./dependencies/last-merge
+COPY --from=jdime ./usr/bin/jdime ./dependencies/jdime
+COPY ./vendor/mergiraf ./dependencies/mergiraf
+COPY ./vendor/spork.jar ./dependencies/spork.jar
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
