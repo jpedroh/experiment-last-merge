@@ -28,8 +28,8 @@ COPY --from=mining_framework ./usr/local/bin/miningframework ./tools/miningframe
 
 COPY --from=last_merge ./last-merge ./dependencies/last-merge
 COPY --from=jdime ./usr/bin/jdime ./dependencies/jdime
+RUN wget -O ./dependencies/spork.jar https://github.com/ASSERT-KTH/spork/releases/download/v0.5.1/spork-0.5.1.jar
 COPY ./vendor/mergiraf ./dependencies/mergiraf
-COPY ./vendor/spork.jar ./dependencies/spork.jar
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
