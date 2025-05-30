@@ -1,1 +1,3 @@
 .env.local
+default.db
+__pycache__
