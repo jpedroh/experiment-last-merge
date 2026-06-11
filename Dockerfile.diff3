@@ -12,7 +12,8 @@ WORKDIR /usr/src/app
 COPY --from=mining_framework ./usr/local/bin/miningframework ./tools/miningframework
 
 COPY ./vendor/mergiraf ./dependencies/mergiraf
-COPY --from=last_merge ./last-merge ./dependencies/last-merge
+COPY ./vendor/diff3.sh ./dependencies/diff3.sh
+COPY --from=last_merge ./last-merge /usr/src/app/dependencies/last-merge
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
