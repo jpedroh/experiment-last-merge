@@ -5,7 +5,7 @@ FROM ghcr.io/jpedroh/miningframework:feat-last-merge-diff3-experiment AS mining_
 FROM eclipse-temurin:17-jdk-jammy
 
 RUN set -ex; \
-    apt-get update; \
+    apt-get -o APT::Update::Post-Invoke::= -o APT::Update::Post-Invoke-Success::= update; \
     apt-get install -y --no-install-recommends curl gcc libc-dev passwd; \
     curl -o /usr/local/bin/su-exec.c https://raw.githubusercontent.com/ncopa/su-exec/master/su-exec.c; \
     gcc -Wall \
