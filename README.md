@@ -19,6 +19,11 @@ This repository is a replication package for an experiment comparing **LASTMerge
     ```bash
     bash start-experiment.sh
     ```
+    For the JavaScript experiment, build the local image first and then run the launcher:
+    ```bash
+    make build-js-image
+    make run-js-experiment
+    ```
 
 4. **Customizing Evaluation**  
     You can customize the projects and commits used in the evaluation by editing the `input/commits.csv` and `input/projects.csv` files.
