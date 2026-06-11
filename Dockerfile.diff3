@@ -5,7 +5,7 @@ FROM ghcr.io/jpedroh/miningframework:feat-last-merge-diff3-experiment AS mining_
 FROM eclipse-temurin:17-jdk-alpine
 
 RUN set -ex; \
-    apk add --no-cache su-exec
+    apk add --no-cache git diffutils su-exec
 
 WORKDIR /usr/src/app
 
