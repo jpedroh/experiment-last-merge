@@ -5,11 +5,11 @@ HOST_USER_ID=${HOST_USER_ID:-9001}
 HOST_GROUP_ID=${HOST_GROUP_ID:-9001}
 
 # Create a user and group with the same IDs as the host user
-if ! grep -q "^mygroup:" /etc/group; then
-    addgroup -g "$HOST_GROUP_ID" mygroup
+if ! getent group mygroup >/dev/null 2>&1; then
+    groupadd -g "$HOST_GROUP_ID" mygroup
 fi
-if ! grep -q "^myuser:" /etc/passwd; then
-    adduser -D -u "$HOST_USER_ID" -G mygroup myuser
+if ! id -u myuser >/dev/null 2>&1; then
+    useradd -u "$HOST_USER_ID" -g mygroup -m myuser
 fi
 
 # Change ownership of the mounted directory

@@ -2,10 +2,20 @@ FROM ghcr.io/jpedroh/last-merge:main AS last_merge
 
 FROM ghcr.io/jpedroh/miningframework:feat-last-merge-diff3-experiment AS mining_framework
 
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-jammy
 
 RUN set -ex; \
-    apk add --no-cache git diffutils su-exec
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends bash ca-certificates wget gcc libc6-dev git diffutils passwd; \
+    wget -O /usr/local/bin/su-exec.c https://raw.githubusercontent.com/ncopa/su-exec/master/su-exec.c; \
+    gcc -Wall \
+        /usr/local/bin/su-exec.c -o/usr/local/bin/su-exec; \
+    chown root:root /usr/local/bin/su-exec; \
+    chmod 0755 /usr/local/bin/su-exec; \
+    rm -f /usr/local/bin/su-exec.c; \
+    apt-get purge -y --auto-remove wget gcc libc6-dev; \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
