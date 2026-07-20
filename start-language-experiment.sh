@@ -6,22 +6,24 @@ EXPERIMENT_NAME=${EXPERIMENT_NAME-$(date +"%Y_%m_%d_%H_%M")}
 EXECUTION_FOLDER=${EXECUTION_FOLDER-$PWD/executions/$EXPERIMENT_NAME}
 OUTPUT_FOLDER=$EXECUTION_FOLDER/output
 THREADS=${THREADS-1}
+LANGUAGE=${LANGUAGE}
+LANGUAGE_SUFFIX=${LANGUAGE_SUFFIX}
 
 if [ -z "$CONTAINER_NAME_SUFFIX" ]; then
-    CONTAINER_NAME=generic_merge_experiment_javascript_${EXPERIMENT_NAME}
+    CONTAINER_NAME=generic_merge_experiment_${LANGUAGE}_${EXPERIMENT_NAME}
 else
-    CONTAINER_NAME=generic_merge_experiment_javascript_${EXPERIMENT_NAME}_${CONTAINER_NAME_SUFFIX}
+    CONTAINER_NAME=generic_merge_experiment_${LANGUAGE}_${EXPERIMENT_NAME}_${CONTAINER_NAME_SUFFIX}
 fi
 
-if ! docker image inspect experiment-javascript >/dev/null 2>&1; then
-    echo "Missing Docker image experiment-javascript."
+if ! docker image inspect experiment-${LANGUAGE} >/dev/null 2>&1; then
+    echo "Missing Docker image experiment-${LANGUAGE}."
     echo "Build it first with: make build-js-image"
     exit 1
 fi
 
 mkdir -p $OUTPUT_FOLDER
-cp input/javascript/projects.csv $OUTPUT_FOLDER/projects.csv
-cp input/javascript/commits.csv $OUTPUT_FOLDER/commits.csv
+cp input/${LANGUAGE}/projects.csv $OUTPUT_FOLDER/projects.csv
+cp input/${LANGUAGE}/commits.csv $OUTPUT_FOLDER/commits.csv
 docker run -d \
     --pids-limit=-1 \
     --ulimit nproc=65535:65535 \
@@ -33,11 +35,11 @@ docker run -d \
     -v $OUTPUT_FOLDER/projects.csv:/usr/src/app/projects.csv \
     -v $OUTPUT_FOLDER/commits.csv:/usr/src/app/commits.csv \
     --name=$CONTAINER_NAME \
-    experiment-javascript \
+    experiment-${LANGUAGE} \
     ./tools/miningframework/install/miningframework/bin/miningframework \
     --threads $THREADS \
     --injector=injectors.GenericMergeDiff3Module \
-    --extension=".js" \
+    --extension="${LANGUAGE_SUFFIX}" \
     --log-level=TRACE \
     --keep-projects \
     --project-commit-hashes-file=commits.csv \
