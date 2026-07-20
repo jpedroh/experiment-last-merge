@@ -1,7 +1,7 @@
-.PHONY: build-js-image run-js-experiment
+.PHONY: build-language-image run-language-experiment
 
-build-js-image:
-	docker build --pull -f Dockerfile.diff3 -t experiment-javascript .
+build-language-image:
+	docker build --pull -f Dockerfile.diff3 -t experiment-$(LANGUAGE) .
 
-run-js-experiment:
-	bash start-javascript-experiment.sh
+run-language-experiment:
+	LANGUAGE=$(LANGUAGE) LANGUAGE_SUFFIX=$(LANGUAGE_SUFFIX) bash start-language-experiment.sh
